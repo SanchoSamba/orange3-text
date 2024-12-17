@@ -224,7 +224,7 @@ class OWTopicModeling(OWWidget, ConcurrentWidgetMixin):
         self.topic_desc.topicSelected.connect(self.send_topic_by_id)
         self.mainArea.layout().addWidget(self.topic_desc)
         self.topic_desc.setFocus()
-
+ 
     @Inputs.corpus
     def set_data(self, data=None):
         self.Warning.less_topics_found.clear()
@@ -276,7 +276,7 @@ class OWTopicModeling(OWWidget, ConcurrentWidgetMixin):
 
         if self.model.name == "Latent Dirichlet Allocation":
             bound = self.model.model.log_perplexity(infer_ngrams_corpus(corpus))
-            self.perplexity = "{:.5f}".format(np.exp2(-bound))
+            self.perplexity = "{:.2f}".format(np.exp2(-bound))
         else:
             self.perplexity = "n/a"
         # for small corpora it is slower to use more processes
@@ -291,7 +291,7 @@ class OWTopicModeling(OWWidget, ConcurrentWidgetMixin):
             processes=processes,
         )
         coherence = cm.get_coherence()
-        self.coherence = "{:.5f}".format(coherence)
+        self.coherence = "{:.2f}".format(coherence)
 
         self.Outputs.all_topics.send(self.model.get_all_topics_table())
 
