@@ -265,15 +265,15 @@ def _hypergeom_clusters(
         # select only words with p-values less than threshold
         sel_words = [w for w in chain.from_iterable(cls_kwds)]
         sel_words = [w for w in sel_words if w in words]
-        sel_words = [(w, c / n_docs) for w, c
-                     in Counter(sel_words).most_common(n_words)]
+        indices = [np.where(all_keywords == w)[0][0] for w in sel_words]
+        sel_pvalues = [p_values[i] for i in indices]
+        sel_words = [(w, c / n_docs, p) for (w, c), p in zip(Counter(sel_words).most_common(n_words), sel_pvalues)]
+        sel_words = sorted(sel_words, key=lambda x: (-x[1], x[2]))
         selected_clusters_keywords[label] = sel_words
-
         all_scores.append(X[index:index + n_docs].sum(axis=0) / n_docs)
         all_p_values.append(p_values)
 
         index += n_docs
-
     all_scores = np.vstack(all_scores)
     all_p_values = np.vstack(all_p_values)
     return selected_clusters_keywords, all_keywords, all_scores, all_p_values

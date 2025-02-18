@@ -179,9 +179,9 @@ class OWAnnotatorGraph(OWScatterPlotBase):
         if labels is None:
             return
         for label_per, (x, y), _ in labels:
-            words = [label for label, _ in label_per[: self.n_cluster_labels]]
+            words = [label for label, _, _ in label_per[: self.n_cluster_labels]]
             ttip = "\n".join([f"{round(p * 100)}%  {label}"
-                              for label, p in label_per])
+                              for label, p, _ in label_per])
             item = CenteredTextItem(self.view_box, x, y, words, ttip)
             if words:
                 self.plot_widget.addItem(item)
